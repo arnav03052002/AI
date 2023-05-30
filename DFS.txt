@@ -1,0 +1,93 @@
+#include <iostream>
+#include <queue>
+#include <stack>
+
+#include<vector>
+
+using namespace std;
+
+void bfs(vector<vector<int>>&graph , int start){
+    
+    int numVer=graph.size();
+    vector<bool>visited(numVer,false);
+    
+    queue<int>q;
+    
+    q.push(start);
+    visited[start]=true;
+    
+    while(!q.empty()){
+        
+        int temp;
+        temp=q.front();
+        q.pop();
+        cout<<temp<<" ";
+        for(int neigh : graph[temp]){
+            
+            if(!visited[neigh]){
+                q.push(neigh);
+                visited[neigh]=true;
+            }
+        }
+    }
+    
+}
+
+void dfs(vector<vector<int>>graph,int start){
+    
+    int numVer=graph.size();
+    vector<bool>visited(numVer,false);
+    
+    stack<int>s;
+    
+    s.push(start);
+    visited[start]=true;
+    
+    while(!s.empty()){
+        
+        int temp=s.top();
+        s.pop();
+        cout<<temp<<" ";
+        
+        for(int neigh : graph[temp]){
+            
+            if(!visited[neigh]){
+                s.push(neigh);
+                visited[neigh]=true;
+            }
+        }
+    }
+    
+    
+}
+
+int main(){
+    
+    cout<<"Enter no of vertices :";
+    int vert,edge;
+    cin>>vert;
+    
+    cout<<"Enter no of edges :";
+    cin>>edge;
+    
+    vector<vector<int>>graph(vert);
+    
+    cout<<"Enter the edges :"<<endl;
+    
+    for(int i=0;i<edge;i++){
+        int src,des;
+        cin>>src>>des;
+        
+        graph[src].push_back(des);
+        graph[des].push_back(src);
+    }
+    
+    int st;
+    cout<<"Enter starting node :";
+    cin>>st;
+    
+    bfs(graph,st);
+    dfs(graph,st);
+    return 0;
+    
+}
