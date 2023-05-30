@@ -1,0 +1,69 @@
+#include <iostream>
+#include <vector>
+#include <algorithm>
+
+using namespace std;
+
+struct Job {
+    int deadline;
+    int profit;
+};
+
+bool compareJobs(const Job& job1, const Job& job2) {
+    return job1.profit > job2.profit;
+}
+
+vector<int> scheduleJobs(vector<Job>& jobs, int n) {
+    vector<int> slots(n, -1);
+    sort(jobs.begin(), jobs.end(), compareJobs);
+
+    for (const Job& job : jobs) {
+        for (int i = job.deadline - 1; i >= 0; --i) {
+            if (slots[i] == -1) {
+                slots[i] = job.profit;
+                break;
+            }
+        }
+    }
+
+    return slots;
+}
+
+int calculateTotalProfit(const vector<int>& slots) {
+    int totalProfit = 0;
+    for (int profit : slots) {
+        if (profit != -1) {
+            totalProfit += profit;
+        }
+    }
+    return totalProfit;
+}
+
+int main() {
+    int n;
+    cout << "Enter the number of jobs: ";
+    cin >> n;
+
+    vector<Job> jobs(n);
+    for (int i = 0; i < n; ++i) {
+        cout << "Enter details for Job " << i + 1 << endl;
+        cout << "Deadline for Job " << i + 1 << ": ";
+        cin >> jobs[i].deadline;
+        cout << "Profit for Job " << i + 1 << ": ";
+        cin >> jobs[i].profit;
+    }
+
+    vector<int> slots = scheduleJobs(jobs, n);
+    int totalProfit = calculateTotalProfit(slots);
+
+    cout << "\nScheduled Jobs: ";
+    for (int profit : slots) {
+        cout << profit << " ";
+    }
+    cout << endl;
+
+    cout << "Total Profit: " << totalProfit << endl;
+
+    return 0;
+}
+
